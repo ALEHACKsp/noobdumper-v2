@@ -20,6 +20,9 @@ A (mostly dll) dumper for CS:GO cheat loaders that use manual map injection meth
 
 # Tip
 #### The second VirtualAllocEx (and the next WriteProcessMemory after it) is/are called just for loader' stub, it/they isn't/aren't useful on its/their own at all.
+#### These last 2 files are not part of the binary as they are loader' stub!!!
+![image](https://user-images.githubusercontent.com/68382500/144725498-c79a2d9e-da6e-44ba-911f-94105af5d449.png)
+
 
 # Screenshots
 
