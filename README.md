@@ -1,6 +1,7 @@
 # NoobDumper v2
 A (mostly dll) dumper for CS:GO cheat loaders that use manual map injection method
 
+# Support server: https://discord.gg/hq2e3xPmEK
 # How to use this
 ##### Inject the dumper into the loader ( x86 ).
 
