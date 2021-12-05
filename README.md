@@ -8,6 +8,9 @@ A (mostly dll) dumper for CS:GO cheat loaders that use manual map injection meth
 1. Let the loader try to inject (manual map) the binary into the target process.
 2. Watch how the binary is being exported.
 
+# Changelog
+##### 0.2: Switched from userland api (WriteProcessMemory -> NtWriteVirtualMemory) to kernel mode function. (Calling a userland function would automatically call the kernel mode one).
+
 # Configuration
 ##### Variables ( dllmain.cpp - DllMain ).
 1. bool
