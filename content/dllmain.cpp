@@ -10,18 +10,24 @@ Initialization( LPVOID )
     PCHAR pcAddress;
     PCHAR pcAddress2;
 
+    HMODULE ntdll;
+    PCHAR krnlAddress;
 
     krnl32 = GetModuleHandleA( "kernel32" );
+    ntdll = GetModuleHandleA( "ntdll.dll" );
 
-    if ( krnl32 )
+    if ( krnl32 && ntdll )
     {
+        krnlAddress = ( PCHAR ) GetProcAddress( ntdll, "NtWriteVirtualMemory" );
+
         pcAddress = ( PCHAR ) GetProcAddress( krnl32, "WriteProcessMemory" );
         pcAddress2 = ( PCHAR ) GetProcAddress( krnl32, "VirtualAllocEx" );
-    }
-        
+    }  
     else
     {
-        MessageBoxA( 0, "Couldn't get kernel32 module handle!", "Error", 0 );
+        MessageBoxA( 0, "Couldn't get kernel32 or ntdll module handle!", "Error", 0 );
+        //if you actually wanna see which one is missing
+        //fucking debug, I won't just add more junk than that
         return FALSE;
     }
         
@@ -43,16 +49,25 @@ Initialization( LPVOID )
         return FALSE;
     }
 
-    if ( MH_CreateHook( pcAddress, &hkWriteProcessMemory, ( LPVOID* ) &oWriteProcessMemory ) != MH_OK )
+    /*if ( MH_CreateHook( pcAddress, &hkWriteProcessMemory, ( LPVOID* ) &oWriteProcessMemory ) != MH_OK )
     {
         MessageBoxA( 0, "Something went wrong while creating the hook!", "Error", 0 );
         return FALSE;
+    }*/
+
+    if ( MH_CreateHook( krnlAddress, &hkNtWriteVirtualMemory, ( LPVOID* ) &oNtWriteVirtualMemory ) != MH_OK )
+    {
+        MessageBoxA( 0, "Something went wrong while creating the hook x3!", "Error", 0 );
+        return FALSE;
     }
+
     if ( MH_CreateHook( pcAddress2, &hkVirtualAllocEx, ( LPVOID* ) &oVirtualAllocEx ) != MH_OK )
     {
         MessageBoxA( 0, "Something went wrong while creating the hook x2!", "Error", 0 );
         return FALSE;
     }
+    
+
 
     if ( MH_EnableHook( MH_ALL_HOOKS ) != MH_OK )
     {
@@ -64,7 +79,7 @@ Initialization( LPVOID )
 
     CreateDirectoryA( "Dumps", 0 );
 
-    while ( 1 ) Sleep(0xffffff);
+    while ( 1 ) Sleep(0xFFFFFF);
     return TRUE;
 }
 
